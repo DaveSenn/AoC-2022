@@ -1,4 +1,9 @@
-﻿const String input = @"A Z
+﻿using System.Diagnostics.CodeAnalysis;
+
+[SuppressMessage( "ReSharper", "UnusedType.Global" )]
+public sealed partial class Day2
+{
+    private const String Input = @"A Z
 C X
 A Z
 A Z
@@ -2498,129 +2503,4 @@ A Z
 A Z
 A Z
 A Z";
-
-static Int32 GetSignValue( String sign )
-    => sign switch
-    {
-        "X" => 1,
-        "Y" => 2,
-        "Z" => 3,
-        _ => throw new ArgumentOutOfRangeException()
-    };
-
-static GameResult GetGameResult( String elf, String me ) =>
-    ( elf, me ) switch
-    {
-        ("A", "X") => GameResult.Draw,
-        ("B", "X") => GameResult.Lose,
-        ("C", "X") => GameResult.Win,
-
-        ("A", "Y") => GameResult.Win,
-        ("B", "Y") => GameResult.Draw,
-        ("C", "Y") => GameResult.Lose,
-
-        ("A", "Z") => GameResult.Lose,
-        ("B", "Z") => GameResult.Win,
-        ("C", "Z") => GameResult.Draw,
-
-        _ => throw new ArgumentOutOfRangeException()
-    };
-
-static Int32 GetGameResultPoints( GameResult gameResult )
-    => gameResult switch
-    {
-        GameResult.Lose => 0,
-        GameResult.Draw => 3,
-        GameResult.Win => 6,
-        _ => throw new ArgumentOutOfRangeException()
-    };
-
-static String GetSignBasedOnResult( String elf, GameResult result )
-    => ( elf, result ) switch
-    {
-        ("A", GameResult.Lose) => "Z",
-        ("A", GameResult.Draw) => "X",
-        ("A", GameResult.Win) => "Y",
-
-        ("B", GameResult.Lose) => "X",
-        ("B", GameResult.Draw) => "Y",
-        ("B", GameResult.Win) => "Z",
-
-        ("C", GameResult.Lose) => "Y",
-        ("C", GameResult.Draw) => "Z",
-        ("C", GameResult.Win) => "X",
-
-        _ => throw new ArgumentOutOfRangeException()
-    };
-
-static void V1()
-{
-    var points = 0;
-    foreach ( var line in input.Split( Environment.NewLine, StringSplitOptions.RemoveEmptyEntries ) )
-    {
-        var signs = line.Split( ' ', StringSplitOptions.RemoveEmptyEntries );
-        var gameResult = GetGameResult( signs[0], signs[1] );
-        points += GetGameResultPoints( gameResult );
-        points += GetSignValue( signs[1] );
-    }
-
-    Console.WriteLine( $"Points: {points}" );
 }
-
-static void V2()
-{
-    var points = 0;
-    foreach ( var line in input.Split( Environment.NewLine, StringSplitOptions.RemoveEmptyEntries ) )
-    {
-        var signs = line.Split( ' ', StringSplitOptions.RemoveEmptyEntries );
-
-        var expectedResult = signs[1] switch
-        {
-            "X" => GameResult.Lose,
-            "Y" => GameResult.Draw,
-            "Z" => GameResult.Win,
-            _ => throw new ArgumentOutOfRangeException()
-        };
-        points += GetGameResultPoints( expectedResult );
-
-        var mySign = GetSignBasedOnResult( signs[0], expectedResult );
-        points += GetSignValue( mySign );
-    }
-
-    Console.WriteLine( $"Points: {points}" );
-}
-
-/*
-X => lose
-Y => draw
-z => win
- */
-
-V1();
-V2();
-Console.ReadLine();
-
-public enum GameResult
-{
-    Lose = 0,
-    Draw = 1,
-    Win = 2
-}
-
-// A for Rock
-// B for Paper
-// C for Scissors
-
-// X for Rock
-// Y for Paper
-// Z for Scissors
-
-/*
-1 for Rock 
-2 for Paper 
-3 for Scissors
-+ 
-0 lost
-3 draw
-6 win
- */
