@@ -40,9 +40,9 @@ public sealed partial class Day10 : IDay
         var sb = new StringBuilder( 6 * 40 );
         foreach ( var (cycle, x) in ParseInput( Input ) )
         {
-            var screenColumn = ( cycle - 1 ) % 40;
-            sb.Append( Math.Abs( x - screenColumn ) < 3 - 1 ? "#" : "." );
-            if ( screenColumn == 39 )
+            var col = ( cycle - 1 ) % 40;
+            sb.Append( Math.Abs( x - col ) < 3 - 1 ? "#" : "." );
+            if ( col == 39 )
                 sb.AppendLine();
         }
 
